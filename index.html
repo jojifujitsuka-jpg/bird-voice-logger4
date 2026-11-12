@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>野鳥音声記録アプリ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans pb-12">
+    <div class="max-w-md mx-auto p-4 flex flex-col min-h-screen">
+        <header class="mb-4 text-center">
+            <h1 class="text-2xl font-bold text-green-700">野鳥ボイスロガー</h1>
+            <p class="text-sm text-gray-500 mt-1">完全カタカナ自動変換・タイムスタンプ記録</p>
+        </header>
+
+        <!-- 入力パネル（上部固定） -->
+        <div class="bg-white rounded-2xl shadow p-4 mb-4">
+            <label for="birdInput" class="block text-sm text-gray-600 mb-2">キーボードのマイクで鳥の名前を入力</label>
+            
+            <div class="flex gap-2">
+                <input type="text" id="birdInput" placeholder="例: ツメナガセキレイ" 
+                    class="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                
+                <button onclick="addRecordFromInput()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-xl shadow transition">
+                    追加
+                </button>
+            </div>
+        </div>
+
+        <!-- 記録管理・出力ボタン -->
+        <div class="flex justify-between items-center mb-3">
+            <h2 class="font-bold text-gray-700">記録一覧 (<span id="count">0</span>件)</h2>
+            <div class="space-x-2">
+                <button onclick="exportCSV()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1.5 rounded-lg shadow">
+                    LibreOffice用CSV出力
+                </button>
+                <button onclick="clearAll()" class="bg-red-50 hover:bg-red-100 text-red-600 text-sm px-3 py-1.5 rounded-lg">
+                    全削除
+                </button>
+            </div>
+        </div>
+
+        <!-- 記録リスト（下側に順に追加表示） -->
+        <div id="recordList" class="space-y-2 flex-1 pb-6">
+            <!-- 記録がここに追加されます -->
+        </div>
+    </div>
+
+    <script>
+        let records = JSON.parse(localStorage.getItem('bird_records') || '[]');
+
+        //
